@@ -6,14 +6,14 @@ require "net/http"
 class Swisclient
 
   def initialize(host, port, username, password)
-    @host = host
-    @port = port
-    @username = username
-    @password = password
-    @querypath = "/SolarWinds/InformationService/v3/Json/Query"
-    @crudpath = ""
-    @usessl = true
-    @sslverifymode = OpenSSL::SSL::VERIFY_NONE
+    @host       = host
+    @port       = port
+    @username   = username
+    @password   = password
+    @querypath  = "/SolarWinds/InformationService/v3/Json/Query"
+    @crudpath   = ""
+    @usessl     = true
+    @sslverify  = OpenSSL::SSL::VERIFY_NONE
   end
 
   # This is a raw query function, no syntactical sugar
@@ -27,7 +27,7 @@ class Swisclient
     uri = URI.parse(@host + ":" + @port + "#{path}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = @usessl
-    http.verify_mode = @sslverifymode
+    http.verify_mode = @sslverify
     request = Net::HTTP::Post.new(uri.request_uri, initheader = {'Content-Type' =>'application/json'})
     request.body = payload.to_json
     request.basic_auth(@username.to_s, @password.to_s)
