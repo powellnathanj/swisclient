@@ -5,7 +5,7 @@ require "net/http"
 
 class Swisclient
 
-  def initialize(host, port, username, password)
+  def initialize(username, password, host, port="17778")
     @host       = host
     @port       = port
     @username   = username
@@ -39,13 +39,19 @@ class Swisclient
   end
 
   # Methods for typical operations
-  def query_by_nodename(name)
+  def query_by_nodename(nodename)
+    query = {"query" => "SELECT NodeName, NodeID FROM Orion.Nodes WHERE NodeName=@name", "parameters" => {"name" => "#{nodename}"}}
+    do_http_request(@querypath, query).body.to_s
   end
 
   def query_by_nodeid(nodeid)
+    query = {"query" => "SELECT NodeName, NodeID FROM Orion.Nodes WHERE NodeID=@id", "parameters" => {"id" => "#{nodeid}"}}
+    do_http_request(@querypath, query).body.to_s
   end
   
   def query_by_ipaddress(ipaddress)
+    query = {"query" => "SELECT NodeName, NodeID FROM Orion.Nodes WHERE IPAddress=@ipaddr", "parameters" => {"ipaddr" => "#{ipaddress}"}}
+    do_http_request(@querypath, query).body.to_s
   end
 
   private :do_http_request
