@@ -14,6 +14,7 @@ class Swisclient
     @crudpath = ""
     @initheader = {'Content-Type' =>'application/json'}
     @usessl = true
+    @sslverifymode = OpenSSL::SSL::VERIFY_NONE
   end
 
   # This is a raw query function, no syntactical sugar
@@ -31,7 +32,7 @@ class Swisclient
     uri = URI.parse(@host + ":" + @port + "#{path}")
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = @usessl
-    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+    http.verify_mode = @sslverifymode
     return http, uri
   end
 
