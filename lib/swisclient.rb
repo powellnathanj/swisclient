@@ -48,6 +48,6 @@ class Swisclient
   def query_by_ipaddress(ipaddress)
   end
 
-  private :build_http_request
+  private :do_http_request
 
 end
