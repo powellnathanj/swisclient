@@ -20,11 +20,11 @@ class Swisclient
   # The query should be a ruby hash similar to:
   # {"query" => "SELECT NodeID FROM Orion.Nodes WHERE NodeName=@name", "parameters" => {"name" => "myhost.mydomain.com"}}
   def query(query)
-    build_http_request(@querypath, query).body.to_s
+    do_http_request(@querypath, query).body.to_s
   end
  
   # Private method for creating http objects and executing requests against the API
-  def build_http_request(path, payload)
+  def do_http_request(path, payload)
     uri = URI.parse(@host + ":" + @port + "#{path}")
 
     http = Net::HTTP.new(uri.host, uri.port)
