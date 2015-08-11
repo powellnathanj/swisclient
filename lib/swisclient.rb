@@ -12,7 +12,6 @@ class Swisclient
     @password = password
     @querypath = "/SolarWinds/InformationService/v3/Json/Query"
     @crudpath = ""
-    @initheader = {'Content-Type' =>'application/json'}
     @usessl = true
     @sslverifymode = OpenSSL::SSL::VERIFY_NONE
   end
@@ -29,7 +28,7 @@ class Swisclient
     http = Net::HTTP.new(uri.host, uri.port)
     http.use_ssl = @usessl
     http.verify_mode = @sslverifymode
-    request = Net::HTTP::Post.new(uri.request_uri, initheader = @initheader)
+    request = Net::HTTP::Post.new(uri.request_uri, initheader = {'Content-Type' =>'application/json'})
     request.body = payload.to_json
     request.basic_auth(@username.to_s, @password.to_s)
     return http.request(request)
