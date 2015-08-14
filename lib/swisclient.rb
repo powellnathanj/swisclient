@@ -6,12 +6,13 @@ require "net/http"
 class Swisclient
 
   def initialize(username, password, host, port="17778")
+    swispath    = "/SolarWinds/InformationService/v3/Json"
     @host       = host
     @port       = port
     @username   = username
     @password   = password
-    @querypath  = "/SolarWinds/InformationService/v3/Json/Query"
-    @addpath    = "/SolarWinds/InformationService/v3/Json/Create/Orion.Nodes"
+    @querypath  = "#{swispath}" + "/Query"
+    @addpath    = "#{swispath}" + "/Create/Orion.Nodes"
     @usessl     = true
     @sslverify  = OpenSSL::SSL::VERIFY_NONE
   end
@@ -19,24 +20,30 @@ class Swisclient
   # This is a raw query function, no syntactical sugar
   # The query should be a ruby hash similar to:
   # {"query" => "SELECT NodeID FROM Orion.Nodes WHERE NodeName=@name", "parameters" => {"name" => "myhost.mydomain.com"}}
+  # returns a ruby hash
   def query(query)
-    do_http_request(@querypath, query).body.to_s
+    do_http_request(@querypath, query)
   end
  
-  # Methods for typical query operations
+  # Search for a node by the NodeName attribute
+  # returns a ruby hash
   def query_by_nodename(nodename)
     query = {"query" => "SELECT NodeName, NodeID FROM Orion.Nodes WHERE NodeName=@name", "parameters" => {"name" => "#{nodename}"}}
-    do_http_request(@querypath, query).body.to_s
+    do_http_request(@querypath, query)
   end
 
+  # Search for a node by the NodeID attribute
+  # returns a ruby hash
   def query_by_nodeid(nodeid)
-    query = {"query" => "SELECT NodeName, NodeID FROM Orion.Nodes WHERE NodeID=@id", "parameters" => {"id" => "#{nodeid}"}}
-    do_http_request(@querypath, query).body.to_s
+    query = {"query" => "SELECT " + "NodeName, NodeID " + "FROM Orion.Nodes WHERE NodeID=@id", "parameters" => {"id" => "#{nodeid}"}}
+    do_http_request(@querypath, query)
   end
   
+  # Search for a node by the IPAddress attribute
+  # returns a ruby hash
   def query_by_ipaddress(ipaddress)
     query = {"query" => "SELECT NodeName, NodeID FROM Orion.Nodes WHERE IPAddress=@ipaddr", "parameters" => {"ipaddr" => "#{ipaddress}"}}
-    do_http_request(@querypath, query).body.to_s
+    do_http_request(@querypath, query)
   end
 
   # This is a raw add method.  
@@ -44,8 +51,9 @@ class Swisclient
   # {"EntityType" => "Orion.Nodes", "IPAddress" => "192.168.1.2", "Caption"=> "oh hai", "DynamicIP" => "False",  
   #  "Status" => 1, "UnManaged" => "False", "Allow64BitCounters" => "True", "EngineID" => "1",
   #  "ObjectSubType" => "SNMP", "SNMPVersion" => 2, "Community" => "public"}
+  # returns a ruby hash
   def add_node(node)
-    do_http_request(@addpath, node).body.to_s
+    do_http_request(@addpath, node)
   end
 
   # Private method for creating http objects and executing requests against the API
@@ -60,7 +68,7 @@ class Swisclient
     request.body = payload.to_json
     request.basic_auth(@username.to_s, @password.to_s)
 
-    return http.request(request)
+    return JSON.parse(http.request(request).body)
   end
 
   private :do_http_request
