@@ -1,12 +1,12 @@
-## swisclient - A Ruby Gem for interacting with the Solarwinds Information Service
+##swisclient - A Ruby Gem for interacting with the Solarwinds Information Service
 
 We use [Solarwinds](http://www.solarwinds.com/) for monitoring.  It is useful for us to automate various CRUD tasks.  This is just an attempt to package our custom stuff up a bit neater so it can be reused.
 
-## Install
+##Install
 
 I will eventually push this up to [rubygems](http://rubygems.org) but for now you have to build it yourself
 
-````
+```
  $ git clone https://github.com/slaney/swisclient.git
 
  $ cd swisclient
@@ -22,6 +22,6 @@ I will eventually push this up to [rubygems](http://rubygems.org) but for now yo
    Parsing documentation for swisclient-0.1.0
    Installing ri documentation for swisclient-0.1.0
    1 gem installed
-```` 
+``` 
 
-# Usage
+#Usage
