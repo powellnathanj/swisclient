@@ -35,7 +35,7 @@ class Swisclient
   # Search for a node by the NodeID attribute
   # returns a ruby hash
   def query_by_nodeid(nodeid)
-    query = {"query" => "SELECT " + "NodeName, NodeID " + "FROM Orion.Nodes WHERE NodeID=@id", "parameters" => {"id" => "#{nodeid}"}}
+    query = {"query" => "SELECT NodeName, NodeID FROM Orion.Nodes WHERE NodeID=@id", "parameters" => {"id" => "#{nodeid}"}}
     do_http_request(@querypath, query)
   end
   
