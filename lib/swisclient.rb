@@ -35,7 +35,7 @@ class Swisclient
   # Search for a node by the NodeID attribute
   # returns a ruby hash
   def query_by_nodeid(nodeid)
-    query = {"query" => "SELECT " + "NodeName, NodeID " + "FROM Orion.Nodes WHERE NodeID=@id", "parameters" => {"id" => "#{nodeid}"}}
+    query = {"query" => "SELECT NodeName, NodeID FROM Orion.Nodes WHERE NodeID=@id", "parameters" => {"id" => "#{nodeid}"}}
     do_http_request(@querypath, query)
   end
   
@@ -48,9 +48,13 @@ class Swisclient
 
   # This is a raw add method.  
   # node should be a ruby hash similar to:
+  #
   # {"EntityType" => "Orion.Nodes", "IPAddress" => "192.168.1.2", "Caption"=> "oh hai", "DynamicIP" => "False",  
   #  "Status" => 1, "UnManaged" => "False", "Allow64BitCounters" => "True", "EngineID" => "1",
   #  "ObjectSubType" => "SNMP", "SNMPVersion" => 2, "Community" => "public"}
+  #
+  # Required: IPAddress, EngineID, ObjectSubType, and SNMPVersion
+  #
   # returns a ruby hash
   def add_node(node)
     do_http_request(@addpath, node)
